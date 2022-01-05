@@ -2,7 +2,7 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 from idealforms.formatters import Formatter, money_formatter, default_formatter
-from typing import Dict, List, Tuple, Union, Optional
+from typing import Dict, List, Tuple, Optional
 
 
 DataDict = Dict[str, float]
@@ -17,7 +17,9 @@ def bar(data: DataDict,
         tick_count: int = 5,
         cmap_name: str = "Reds",
         in_bar_labels: bool = True,
-        formatter: Optional[Formatter] = None) -> Tuple[plt.Figure, plt.Axes]:
+        figsize: Tuple[float, float] = (8, 4),
+        formatter: Optional[Formatter] = None,
+        **kwargs) -> Tuple[plt.Figure, plt.Axes]:
 
     if not formatter:
         formatter = default_formatter
@@ -36,7 +38,7 @@ def bar(data: DataDict,
     heights: List[float] = list(data.values())
 
     # get params from data
-    max_height: Union[int, float] = max(heights)
+    max_height: float = max(heights)
     data_color_normalized = [value/max_height for value in heights]
     if not axis_limit:
         axis_limit = max_height
@@ -46,12 +48,12 @@ def bar(data: DataDict,
     plt.style.use('ggplot')
 
     # create figure and axes objects plus color mapping
-    fig, ax = plt.subplots(figsize=(8, 4))
+    fig, ax = plt.subplots(figsize=figsize)
     my_cmap = plt.cm.get_cmap(cmap_name)
     colors = my_cmap(data_color_normalized)
 
     # plotting
-    ax.barh(categories, heights, color=colors)
+    ax.barh(categories, heights, color=colors, **kwargs)
     ax.set(xlabel=x_label,
            ylabel=y_label,
            title=title,

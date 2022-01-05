@@ -35,7 +35,8 @@ class TestBarBasics:
                       title='title',
                       x_label='x_label',
                       y_label='y_label',
-                      tick_count=7)
+                      tick_count=7
+                      )
         assert len(ax.get_xticks()) == 7
 
 
@@ -47,7 +48,8 @@ class TestBarImages:
                       title='title',
                       x_label='x_label',
                       y_label='y_label',
-                      sort='alpha')
+                      sort='alpha'
+                      )
         current_test_image_path = Path('test_image_sort_alpha.png')
         plt.savefig(current_test_image_path)
         different = compare_images(current_test_image_path,
@@ -64,7 +66,8 @@ class TestBarImages:
                       title='title',
                       x_label='x_label',
                       y_label='y_label',
-                      sort='values')
+                      sort='values'
+                      )
         current_test_image_path = Path('test_image_sort_value.png')
         plt.savefig(current_test_image_path)
         different = compare_images(current_test_image_path,
@@ -82,7 +85,8 @@ class TestBarImages:
                       x_label='x_label',
                       y_label='y_label',
                       in_bar_labels=False,
-                      sort='values')
+                      sort='values'
+                      )
         current_test_image_path = Path('test_image_out_labels.png')
         plt.savefig(current_test_image_path)
         different = compare_images(current_test_image_path,

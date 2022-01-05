@@ -1,6 +1,6 @@
 import pytest
-from idealforms.formatters import money_formatter, \
-    thousands_formatter, default_formatter, Formatter
+from idealforms.formatters import Formatter, \
+    default_formatter, thousands_formatter, money_formatter
 
 
 class TestMoneyFormatter:

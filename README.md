@@ -9,16 +9,17 @@ Matplotlib charts formatted according to [The Data Visualization Catalogue](http
 
 ## Bar
 ```python
-import idealforms
+from idealforms.bar import bar
+from idealforms.formatters import money_formatter
 
 categorical_data = dict(apples=500000,
                         oranges=1200000,
                         mangos=2200005)
 
-fig, ax = idealforms.bar(categorical_data,
-                         x_label='revenue',
-                         y_label='fruit',
-                         title='Fruit Revenue',
-                         formatter=idealforms.money_formatter)
+fig, ax = bar(categorical_data,
+              x_label='revenue',
+              y_label='fruit',
+              title='Fruit Revenue',
+              formatter=money_formatter)
 ```
 ![ideal bar chart image](./docs/demo_fig.png)
