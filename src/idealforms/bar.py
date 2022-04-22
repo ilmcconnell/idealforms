@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from idealforms.formatters import Formatter, money_formatter, default_formatter
 from typing import Dict, List, Tuple, Optional
-
+import logging
 
 DataDict = Dict[str, float]
 
@@ -47,10 +47,11 @@ def bar(data: DataDict,
     plt.rcParams.update({'figure.autolayout': True})
     plt.style.use('ggplot')
 
-    # create figure and axes objects plus color mapping
+    # create figure and axes objects pluus color mapping
     fig, ax = plt.subplots(figsize=figsize)
     my_cmap = plt.cm.get_cmap(cmap_name)
     colors = my_cmap(data_color_normalized)
+    renderer = fig.canvas.get_renderer()
 
     # plotting
     ax.barh(categories, heights, color=colors, **kwargs)
@@ -60,17 +61,27 @@ def bar(data: DataDict,
            xlim=(0, axis_limit))
 
     # bar labels
-    bar_end_offset = max_height/66.6
+    bar_end_offset = max_height/100
     bar_label_vertical_alignment = 'center'
     bar_label_fontsize = 16
     if in_bar_labels:
         for i, height in enumerate(heights):
             i, height = int(i), int(height)
-            ax.text(height - bar_end_offset, i, formatter(height, None),
-                    fontsize=bar_label_fontsize,
-                    verticalalignment=bar_label_vertical_alignment,
-                    horizontalalignment='right',
-                    c='white')
+            txt = ax.text(height - bar_end_offset, i, formatter(height, None),
+                          fontsize=bar_label_fontsize,
+                          verticalalignment=bar_label_vertical_alignment,
+                          horizontalalignment='right',
+                          c='white')
+            bb = txt.get_window_extent(renderer=renderer)
+            label_length = bb.width
+            logging.info(label_length)
+            if label_length > height:
+               txt = ax.text(height + bar_end_offset, i, formatter(height, None),
+                             fontsize=bar_label_fontsize,
+                             verticalalignment=bar_label_vertical_alignment,
+                             horizontalalignment='left',
+                             c='black')
+ 
 
     if not in_bar_labels:
         for i, height in enumerate(data.values()):
