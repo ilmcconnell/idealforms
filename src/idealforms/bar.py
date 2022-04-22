@@ -5,7 +5,6 @@ import numpy as np
 from idealforms.formatters import Formatter, money_formatter, default_formatter
 from typing import Dict, List, Tuple, Optional
 
-import logging
 
 DataDict = Dict[str, float]
 
@@ -29,12 +28,12 @@ def bar(data: DataDict,
     x_label: str, label for x axis - bar height values
     y_label: str, label for y axis - label categories
     title: str, title for chart
-    sort: str = 'values' or 'alpha' sort by bar height or label name 
+    sort: str = 'values' or 'alpha' sort by bar height or label name
     axis_limit: Optional[float] = None, set max bar height size
     tick_count: int = 5, set number of ticks to use for bar heights
     cmap_name: str = "Reds" matplot lib color map name to color bars
     in_bar_labels: bool = True, plot bar height value bar, False: plot outside bar
-    short_bar_label: str = 'out', 'skip' if in bar label is too long for for bar, plot outside or don't plot 
+    short_bar_label: str = 'out', 'skip' if in bar label is too long for for bar, plot outside or don't plot
     figsize: Tuple[float, float] = (8, 4), overall fig size to plot
     formatter: Optional[Formatter] = None, idealforms.formatter class to use formatting data labels
     :return: Tuple[plt.Figure, plt.Axes]:
@@ -69,8 +68,8 @@ def bar(data: DataDict,
     # create figure and axes objects plus color mapping
     fig, ax = plt.subplots(figsize=figsize)
     my_cmap = plt.cm.get_cmap(cmap_name)
-    my_cmap = my_cmap(np.linspace(0,1,int(3*len(heights))))  # limit color range to darker colors
-    my_cmap = ListedColormap(my_cmap[len(heights):,:-1]) 
+    my_cmap = my_cmap(np.linspace(0, 1, int(3*len(heights))))  # limit color range to darker colors
+    my_cmap = ListedColormap(my_cmap[len(heights):, :-1])
     colors = my_cmap(data_color_normalized)
     renderer = fig.canvas.get_renderer()
     # plotting
@@ -94,8 +93,8 @@ def bar(data: DataDict,
                           c='white')
             bb = txt.get_window_extent(renderer=renderer).transformed(ax.transData.inverted())
             label_length = bb.width
-            bar_length = ax.patches[i].get_width() 
-            if label_length > bar_length and short_bar_label == 'out': 
+            bar_length = ax.patches[i].get_width()
+            if label_length > bar_length and short_bar_label == 'out':
                 txt.set_x(height + bar_end_offset)
                 txt.set_horizontalalignment('left')
                 txt.set_color('black')
