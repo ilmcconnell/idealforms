@@ -48,7 +48,7 @@ class TestBarImages:
                       title='title',
                       x_label='x_label',
                       y_label='y_label',
-                      sort='alpha'
+                      sort_on='alpha'
                       )
         current_test_image_path = Path('test_image_sort_alpha.png')
         plt.savefig(current_test_image_path)
@@ -66,7 +66,8 @@ class TestBarImages:
                       title='title',
                       x_label='x_label',
                       y_label='y_label',
-                      sort='values'
+                      sort_on='values',
+                      sort_desc=False
                       )
         current_test_image_path = Path('test_image_sort_value.png')
         plt.savefig(current_test_image_path)
@@ -85,7 +86,8 @@ class TestBarImages:
                       x_label='x_label',
                       y_label='y_label',
                       in_bar_labels=False,
-                      sort='values'
+                      sort_on='values',
+                      sort_desc=False
                       )
         current_test_image_path = Path('test_image_out_labels.png')
         plt.savefig(current_test_image_path)

@@ -12,7 +12,9 @@ def bar(data: DataDict,
         x_label: str,
         y_label: str,
         title: str,
-        sort: str = 'values',
+        sort_on: str = 'values',
+        sort_desc: bool = True,
+        reverse_color_order: bool = False,
         axis_limit: Optional[float] = None,
         tick_count: int = 5,
         cmap_name: str = "Reds",
@@ -25,13 +27,15 @@ def bar(data: DataDict,
         formatter = default_formatter
 
     # sort dict
-    if sort == 'values':
+    if sort_on == 'values':
         data = dict(sorted(data.items(),
-                           key=lambda kv: kv[1]))  # type: ignore
-    if sort == 'alpha':
+                           key=lambda kv: kv[1],
+                           reverse=sort_desc))  # type: ignore
+
+    if sort_on == 'alpha':
         data = dict(sorted(data.items(),
                            key=lambda kv: kv[0],
-                           reverse=True))  # type: ignore
+                           reverse=sort_desc))  # type: ignore
 
     # split data dict into lists for plotting
     categories: List[str] = list(data.keys())
@@ -40,6 +44,8 @@ def bar(data: DataDict,
     # get params from data
     max_height: float = max(heights)
     data_color_normalized = [value/max_height for value in heights]
+    if reverse_color_order:
+        data_color_normalized = data_color_normalized[::-1]
     if not axis_limit:
         axis_limit = max_height
 
@@ -62,7 +68,7 @@ def bar(data: DataDict,
     # bar labels
     bar_end_offset = max_height/66.6
     bar_label_vertical_alignment = 'center'
-    bar_label_fontsize = 16
+    bar_label_fontsize = plt.rcParams['axes.labelsize']
     if in_bar_labels:
         for i, height in enumerate(heights):
             i, height = int(i), int(height)
@@ -121,7 +127,7 @@ def main():
                   x_label='revenue',
                   y_label='fruit',
                   title='Fruit Revenue',
-                  sort='values',
+                  sort_on='values',
                   axis_limit=2500000,
                   formatter=money_formatter)
 
