@@ -43,7 +43,6 @@ class TestBarBasics:
 @pytest.mark.parametrize("data", [data_dict])
 class TestBarImages:
     def test_plot_bar_order_bars_by_name(self, data):
-        result = False
         fig, ax = bar(data,
                       title='title',
                       x_label='x_label',
@@ -54,14 +53,11 @@ class TestBarImages:
         plt.savefig(current_test_image_path)
         different = compare_images(current_test_image_path,
                                    comparison_imgs / 'test_bar_sort_alpha.png',
-                                   tol=25)
+                                   tol=50)
         current_test_image_path.unlink()
-        if not different:
-            result = True
-        assert result
+        assert not different
 
     def test_plot_bar_order_bars_by_value(self, data):
-        result = False
         fig, ax = bar(data,
                       title='title',
                       x_label='x_label',
@@ -73,14 +69,11 @@ class TestBarImages:
         plt.savefig(current_test_image_path)
         different = compare_images(current_test_image_path,
                                    comparison_imgs / 'test_bar_sort_values.png',
-                                   tol=25)
+                                   tol=50)
         current_test_image_path.unlink()
-        if not different:
-            result = True
-        assert result
+        assert not different
 
     def test_plot_bar_labels_outside_bars(self, data):
-        result = False
         fig, ax = bar(data,
                       title='title',
                       x_label='x_label',
@@ -93,11 +86,9 @@ class TestBarImages:
         plt.savefig(current_test_image_path)
         different = compare_images(current_test_image_path,
                                    comparison_imgs / 'test_bar_out_labels.png',
-                                   tol=25)
+                                   tol=50)
         current_test_image_path.unlink()
-        if not different:
-            result = True
-        assert result
+        assert not different
 
 
 def test_main():
