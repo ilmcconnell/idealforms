@@ -1,5 +1,6 @@
 import sys
 import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
 import numpy as np
 from idealforms.formatters import Formatter, money_formatter, default_formatter
 from typing import Dict, List, Tuple, Optional
@@ -19,9 +20,26 @@ def bar(data: DataDict,
         tick_count: int = 5,
         cmap_name: str = "Reds",
         in_bar_labels: bool = True,
+        short_bar_label: str = 'out',
         figsize: Tuple[float, float] = (8, 4),
         formatter: Optional[Formatter] = None,
         **kwargs) -> Tuple[plt.Figure, plt.Axes]:
+    """
+    Plot a nice bar graph
+    data: DataDict, dictinoary with data to plot, key: label v:bar height
+    x_label: str, label for x axis - bar height values
+    y_label: str, label for y axis - label categories
+    title: str, title for chart
+    sort: str = 'values' or 'alpha' sort by bar height or label name
+    axis_limit: Optional[float] = None, set max bar height size
+    tick_count: int = 5, set number of ticks to use for bar heights
+    cmap_name: str = "Reds" matplot lib color map name to color bars
+    in_bar_labels: bool = True, plot bar height value bar, False: plot outside bar
+    short_bar_label: str = 'out', 'skip' if in bar label is too long for for bar, plot outside or don't plot
+    figsize: Tuple[float, float] = (8, 4), overall fig size to plot
+    formatter: Optional[Formatter] = None, idealforms.formatter class to use formatting data labels
+    :return: Tuple[plt.Figure, plt.Axes]:
+    """
 
     if not formatter:
         formatter = default_formatter
@@ -56,8 +74,10 @@ def bar(data: DataDict,
     # create figure and axes objects plus color mapping
     fig, ax = plt.subplots(figsize=figsize)
     my_cmap = plt.cm.get_cmap(cmap_name)
+    my_cmap = my_cmap(np.linspace(0, 1, int(3*len(heights))))  # limit color range to darker colors
+    my_cmap = ListedColormap(my_cmap[len(heights):, :-1])
     colors = my_cmap(data_color_normalized)
-
+    renderer = fig.canvas.get_renderer()
     # plotting
     ax.barh(categories, heights, color=colors, **kwargs)
     ax.set(xlabel=x_label,
@@ -66,17 +86,26 @@ def bar(data: DataDict,
            xlim=(0, axis_limit))
 
     # bar labels
-    bar_end_offset = max_height/66.6
+    bar_end_offset = max_height/100
     bar_label_vertical_alignment = 'center'
     bar_label_fontsize = plt.rcParams['axes.labelsize']
     if in_bar_labels:
         for i, height in enumerate(heights):
             i, height = int(i), int(height)
-            ax.text(height - bar_end_offset, i, formatter(height, None),
-                    fontsize=bar_label_fontsize,
-                    verticalalignment=bar_label_vertical_alignment,
-                    horizontalalignment='right',
-                    c='white')
+            txt = ax.text(height - bar_end_offset, i, formatter(height, None),
+                          fontsize=bar_label_fontsize,
+                          verticalalignment=bar_label_vertical_alignment,
+                          horizontalalignment='right',
+                          c='white')
+            bb = txt.get_window_extent(renderer=renderer).transformed(ax.transData.inverted())
+            label_length = bb.width
+            bar_length = ax.patches[i].get_width()
+            if label_length > bar_length and short_bar_label == 'out':
+                txt.set_x(height + bar_end_offset)
+                txt.set_horizontalalignment('left')
+                txt.set_color('black')
+            elif label_length > bar_length and short_bar_label == 'skip':
+                txt.set_text('')
 
     if not in_bar_labels:
         for i, height in enumerate(data.values()):

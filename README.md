@@ -3,7 +3,7 @@
 Matplotlib charts formatted according to [The Data Visualization Catalogue](https://datavizcatalogue.com/).
 
 ## Install
-1. ```git checkout https://github.com/ilmcconnell/idealforms.git```
+1. ```git clone https://github.com/ilmcconnell/idealforms.git```
 2. ```cd idealforms```
 3. ```pip install -e .```
 
