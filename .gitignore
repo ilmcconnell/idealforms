@@ -11,4 +11,5 @@
 *.coverage
 *.idea
 *-failed-diff.png
+dist/*
 
