@@ -36,7 +36,7 @@ jobs:
             ./dist/*.gz
 
       - name: "Publish package distributions to PyPI"
-      - uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
