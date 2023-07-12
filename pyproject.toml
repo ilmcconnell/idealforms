@@ -1,6 +1,6 @@
 [project]
 name = "idealforms"
-version = "0.0.5"
+version = "0.0.9"
 authors = [
   { name="Iain McConnell", email="buckler_08_matador@icloud.com" },
 ]
