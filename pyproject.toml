@@ -35,6 +35,12 @@ tests = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build]
+include = [
+  "src/idealforms/*.py",
+  "/tests",
+]
+
 [tool.hatch.version]
 path = "src/idealforms/__about__.py"
 
